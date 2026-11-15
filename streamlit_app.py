@@ -58,8 +58,12 @@ def download_file(file_path):
     try:
         weights_warning = st.warning("Downloading %s..." % file_path)
         progress_bar = st.progress(0)
-        with open(file_path, "wb") as output_file:
-            with urllib.request.urlopen(EXTERNAL_DEPENDENCIES[file_path]["url"]) as response:
+        request = urllib.request.Request(
+            EXTERNAL_DEPENDENCIES[file_path]["url"],
+            headers={"User-Agent": "Mozilla/5.0"},
+        )
+        with urllib.request.urlopen(request) as response:
+            with open(file_path, "wb") as output_file:
                 length = int(response.info()["Content-Length"])
                 counter = 0.0
                 MEGABYTES = 2.0 ** 20.0
